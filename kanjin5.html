@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>漢字フラッシュカード · 全31課 (नेपाली अर्थ)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Noto+Sans+JP:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@300;400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --bg: #f4f0ea;
+            --card-bg: rgba(255, 255, 245, 0.92);
+            --glass-border: rgba(255, 255, 245, 0.6);
+            --ink: #1e1a14;
+            --ink-soft: #5f5548;
+            --ink-mute: #968c7e;
+            --accent: #bc5a3c;
+            --accent-glow: #e9b49e;
+            --accent-bg: rgba(188, 90, 60, 0.12);
+            --shadow-sm: 0 8px 20px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 20px 32px -12px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            --radius-card: 42px;
+            --radius-pill: 100px;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f7f3ec 0%, #ece2d6 100%);
+            font-family: 'Inter', 'Noto Sans JP', system-ui, sans-serif;
+            color: var(--ink);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg-aura {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background: radial-gradient(circle at 10% 20%, rgba(236, 170, 130, 0.2), transparent 40%),
+                radial-gradient(circle at 90% 70%, rgba(190, 110, 70, 0.18), transparent 45%);
+        }
+
+        /* ---- ヘッダー ---- */
+        .glass-header {
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            backdrop-filter: blur(18px);
+            background: rgba(244, 240, 234, 0.68);
+            border-bottom: 1px solid rgba(255, 255, 245, 0.5);
+            padding: 18px 28px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo-area h1 {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.65rem;
+            font-weight: 500;
+            background: linear-gradient(135deg, #2f2a22, #b15a3a);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+        .logo-area p {
+            font-size: 0.7rem;
+            color: var(--ink-mute);
+            font-weight: 450;
+        }
+
+        .mode-pill {
+            display: flex;
+            background: rgba(255, 255, 250, 0.6);
+            backdrop-filter: blur(6px);
+            border-radius: var(--radius-pill);
+            padding: 6px;
+            gap: 8px;
+        }
+
+        .mode-btn {
+            border: none;
+            background: transparent;
+            padding: 8px 20px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--ink-soft);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .mode-btn.active {
+            background: white;
+            color: var(--accent);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        /* ---- メイン ---- */
+        main {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 28px 20px 56px;
+        }
+
+        .control-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .chapter-select {
+            flex: 1;
+            background: rgba(255, 255, 250, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 14px 20px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--ink);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235f5548' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 18px center;
+            padding-right: 44px;
+        }
+        .chapter-select:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .shuffle-btn {
+            width: 56px;
+            background: rgba(255, 255, 250, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            flex-shrink: 0;
+        }
+        .shuffle-btn.on {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .shuffle-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* ---- プログレス ---- */
+        .progress-section {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 28px;
+            padding: 6px 12px;
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 60px;
+        }
+        .prog-counter {
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            background: white;
+            padding: 5px 16px;
+            border-radius: 40px;
+            color: var(--accent);
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+        .prog-bar-bg {
+            flex: 1;
+            height: 8px;
+            background: #dacfc2;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .prog-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), #e28c6c);
+            border-radius: 12px;
+            transition: width 0.35s ease;
+        }
+        .lesson-badge {
+            font-size: 0.7rem;
+            background: rgba(188, 90, 60, 0.12);
+            padding: 5px 14px;
+            border-radius: 50px;
+            color: var(--accent);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        /* ---- カード ---- */
+        .card-container {
+            perspective: 2000px;
+            margin-bottom: 28px;
+        }
+        .card {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            transform-style: preserve-3d;
+            transition: transform 0.65s cubic-bezier(0.2, 0.85, 0.3, 1.02);
+            cursor: pointer;
+        }
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .face {
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius-card);
+            backface-visibility: hidden;
+            background: var(--card-bg);
+            backdrop-filter: blur(18px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-sm), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 28px 22px;
+            transition: all 0.2s;
+        }
+        .face-back {
+            transform: rotateY(180deg);
+            justify-content: center;
+            gap: 18px;
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 20px;
+            left: 24px;
+            background: var(--accent-bg);
+            backdrop-filter: blur(4px);
+            padding: 5px 15px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: 0.3px;
+        }
+
+        .primary-reading {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: clamp(38px, 7vw, 68px);
+            font-weight: 700;
+            background: #fcf7f0;
+            padding: 12px 28px;
+            border-radius: 80px;
+            color: #3c2e24;
+            margin-bottom: 14px;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5), 0 4px 8px rgba(0, 0, 0, 0.02);
+        }
+        .meaning-ne {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            font-size: clamp(28px, 5vw, 46px);
+            font-weight: 550;
+            background: #e7dfd3;
+            padding: 7px 24px;
+            border-radius: 70px;
+            color: #4f3e2e;
+        }
+        .main-kanji {
+            font-family: 'Noto Serif JP', serif;
+            font-size: clamp(86px, 16vw, 138px);
+            font-weight: 350;
+            line-height: 1.1;
+            color: #241f18;
+            letter-spacing: -0.02em;
+        }
+
+        .back-top {
+            text-align: center;
+            border-bottom: 2px solid #efe5d9;
+            width: 100%;
+            padding-bottom: 12px;
+        }
+        .back-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+        .back-kanji {
+            font-size: clamp(56px, 12vw, 96px);
+            font-family: 'Noto Serif JP', serif;
+            font-weight: 340;
+        }
+        .back-reading {
+            font-size: 1.35rem;
+            font-weight: 550;
+            margin: 6px 0;
+        }
+        .back-meaning {
+            background: #efe3d6;
+            display: inline-block;
+            padding: 5px 22px;
+            border-radius: 60px;
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .tap-hint {
+            position: absolute;
+            bottom: 20px;
+            right: 24px;
+            font-size: 0.7rem;
+            color: var(--ink-mute);
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+        .card:hover .tap-hint {
+            opacity: 1;
+        }
+
+        /* ---- ナビゲーション ---- */
+        .nav-footer {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .nav-btn {
+            flex: 1;
+            background: rgba(255, 255, 250, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            padding: 15px 0;
+            border-radius: 48px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--ink-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .nav-btn.primary {
+            background: #2b2a24;
+            color: white;
+            border: none;
+            flex: 1.6;
+        }
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            background: white;
+        }
+        .nav-btn.primary:hover {
+            background: #3d3a32;
+        }
+        .nav-btn:active {
+            transform: scale(0.96);
+        }
+
+        .key-hint {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 0.7rem;
+            color: var(--ink-mute);
+            background: rgba(0, 0, 0, 0.02);
+            width: fit-content;
+            margin-inline: auto;
+            padding: 6px 18px;
+            border-radius: 40px;
+        }
+
+        /* ---- アニメーション ---- */
+        @keyframes gentleFade {
+            0% {
+                opacity: 0;
+                transform: translateY(14px) scale(0.98);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .card-container.animate .card {
+            animation: gentleFade 0.4s cubic-bezier(0.2, 0.8, 0.4, 1);
+        }
+
+        /* ---- レスポンシブ ---- */
+        @media (max-width: 560px) {
+            .glass-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .mode-pill {
+                justify-content: center;
+            }
+            .card {
+                aspect-ratio: 3/4;
+            }
+            .nav-btn {
+                font-size: 0.8rem;
+                padding: 12px 0;
+            }
+            .progress-section {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .lesson-badge {
+                font-size: 0.6rem;
+                padding: 4px 10px;
+            }
+            .prog-counter {
+                font-size: 0.75rem;
+                padding: 4px 12px;
+            }
+            .face {
+                padding: 20px 16px;
+            }
+            .card-badge {
+                top: 14px;
+                left: 16px;
+                font-size: 0.6rem;
+                padding: 4px 12px;
+            }
+            .tap-hint {
+                bottom: 14px;
+                right: 16px;
+                font-size: 0.6rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .control-row {
+                flex-wrap: wrap;
+            }
+            .chapter-select {
+                flex: 1 1 100%;
+            }
+            .shuffle-btn {
+                width: 100%;
+                height: 48px;
+            }
+            .nav-footer {
+                flex-wrap: wrap;
+            }
+            .nav-btn {
+                flex: 1 1 40%;
+                padding: 12px 0;
+                font-size: 0.75rem;
+            }
+            .nav-btn.primary {
+                flex: 1 1 100%;
+                order: -1;
+            }
+        }
+
+        /* ---- ダークモード ---- */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #191613;
+                --card-bg: rgba(30, 28, 24, 0.85);
+                --glass-border: rgba(255, 255, 220, 0.08);
+                --ink: #f2ede4;
+                --ink-soft: #bfb5a8;
+                --ink-mute: #90887c;
+            }
+            body {
+                background: linear-gradient(145deg, #1e1b17 0%, #13100c 100%);
+            }
+            .primary-reading,
+            .meaning-ne,
+            .back-meaning {
+                background: #2c2822;
+                color: #f0e2d4;
+            }
+            .mode-btn.active {
+                background: #2b2a24;
+                color: #e28c6c;
+            }
+            .prog-counter,
+            .lesson-badge,
+            .chapter-select {
+                background: #26221e;
+                color: #efcfbb;
+            }
+            .prog-bar-bg {
+                background: #3d362e;
+            }
+            .back-top {
+                border-bottom-color: #3d362e;
+            }
+            .chapter-select {
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2390887c' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-aura"></div>
+
+    <!-- ===== ヘッダー ===== -->
+    <header class="glass-header">
+        <div class="logo-area">
+            <h1>漢字フラッシュ</h1>
+            <p>नेपाली अर्थ · 全31課</p>
+        </div>
+        <div class="mode-pill">
+            <button class="mode-btn active" data-mode="meaning">📖 読み → 漢字</button>
+            <button class="mode-btn" data-mode="kanji">🈳 漢字 → 読み</button>
+        </div>
+    </header>
+
+    <!-- ===== メイン ===== -->
+    <main>
+
+        <!-- コントロール -->
+        <div class="control-row">
+            <select id="chapterSelect" class="chapter-select"></select>
+            <button id="shuffleToggle" class="shuffle-btn" title="ランダム順">🔀</button>
+        </div>
+
+        <!-- プログレス -->
+        <div class="progress-section">
+            <span class="prog-counter" id="counter">1 / 1</span>
+            <div class="prog-bar-bg"><div class="prog-fill" id="progFill"></div></div>
+            <span class="lesson-badge" id="lessonBadge">読み込み中</span>
+        </div>
+
+        <!-- カード -->
+        <div class="card-container" id="cardContainer">
+            <div class="card" id="flashcard">
+                <div class="face face-front" id="frontFace"></div>
+                <div class="face face-back" id="backFace"></div>
+            </div>
+        </div>
+
+        <!-- ナビゲーション -->
+        <div class="nav-footer">
+            <button class="nav-btn" id="prevBtn">← 前へ</button>
+            <button class="nav-btn primary" id="flipBtn">🔄 裏返す</button>
+            <button class="nav-btn" id="nextBtn">次へ →</button>
+        </div>
+        <div class="key-hint">
+            ⬅️ ➡️ キー / スワイプ ｜ スペースキーでフリップ ｜ クリック・タップでもフリップ
+        </div>
+
+    </main>
+
+    <script>
+        // =====================================================================
+        //  1. データ定義
+        // =====================================================================
+
+        // ---- レガシー15課 ----
+        const legacyChapters = [{
+            title: " どうぞよろしく！",
+            kanji: [
+                { kanji: "私", reading: "わたし", meaning: "म" },
+                { kanji: "人", reading: "ひと", meaning: "व्यक्ति" },
+                { kanji: "才", reading: "さい", meaning: "प्रतिभा / उमेर" },
+                { kanji: "学", reading: "まなぶ", meaning: "पढ्नु / सिक्नु" },
+                { kanji: "生", reading: "せい", meaning: "जीवन / विद्यार्थी" },
+                { kanji: "校", reading: "こう", meaning: "विद्यालय" },
+                { kanji: "日", reading: "にち", meaning: "सूर्य / दिन" },
+                { kanji: "本", reading: "ほん", meaning: "पुस्तक / मूल" },
+                { kanji: "語", reading: "ご", meaning: "भाषा" }
+            ]
+        }, {
+            title: " 買い物",
+            kanji: [
+                { kanji: "一", reading: "いち", meaning: "एक" },
+                { kanji: "二", reading: "に", meaning: "दुई" },
+                { kanji: "三", reading: "さん", meaning: "तीन" },
+                { kanji: "四", reading: "し", meaning: "चार" },
+                { kanji: "五", reading: "ご", meaning: "पाँच" },
+                { kanji: "六", reading: "ろく", meaning: "छ" },
+                { kanji: "七", reading: "しち", meaning: "सात" },
+                { kanji: "八", reading: "はち", meaning: "आठ" },
+                { kanji: "九", reading: "く", meaning: "नौ" },
+                { kanji: "十", reading: "じゅう", meaning: "दस" },
+                { kanji: "百", reading: "ひゃく", meaning: "सय" },
+                { kanji: "千", reading: "せん", meaning: "हजार" },
+                { kanji: "万", reading: "まん", meaning: "दश हजार" },
+                { kanji: "円", reading: "えん", meaning: "येन / चक्र" }
+            ]
+        }, {
+            title: "いつ、どこで？",
+            kanji: [
+                { kanji: "月", reading: "つき", meaning: "चन्द्र / महिना" },
+                { kanji: "火", reading: "か", meaning: "आगो / मंगलवार" },
+                { kanji: "水", reading: "みず", meaning: "पानी / बुधवार" },
+                { kanji: "木", reading: "き", meaning: "रूख / बिहीवार" },
+                { kanji: "金", reading: "きん", meaning: "सुन / शुक्रवार" },
+                { kanji: "土", reading: "ど", meaning: "पृथ्वी / शनिवार" },
+                { kanji: "曜", reading: "よう", meaning: "साताको दिन" },
+                { kanji: "何", reading: "なに", meaning: "के" },
+                { kanji: "年", reading: "ねん", meaning: "वर्ष" },
+                { kanji: "時", reading: "じ", meaning: "समय / घण्टा" },
+                { kanji: "間", reading: "かん", meaning: "अन्तराल" },
+                { kanji: "分", reading: "ふん", meaning: "मिनेट" }
+            ]
+        }, {
+            title: "新しい町で",
+            kanji: [
+                { kanji: "東", reading: "ひがし", meaning: "पूर्व" },
+                { kanji: "京", reading: "きょう", meaning: "राजधानी" },
+                { kanji: "名", reading: "な", meaning: "नाम" },
+                { kanji: "前", reading: "まえ", meaning: "अघि / सामु" },
+                { kanji: "国", reading: "くに", meaning: "देश" },
+                { kanji: "男", reading: "おとこ", meaning: "पुरुष" },
+                { kanji: "女", reading: "おんな", meaning: "महिला" },
+                { kanji: "区", reading: "く", meaning: "वडा" },
+                { kanji: "市", reading: "し", meaning: "सहर" }
+            ]
+        }, {
+            title: "楽しい週末",
+            kanji: [
+                { kanji: "先", reading: "さき", meaning: "अघिल्लो / अगाडि" },
+                { kanji: "週", reading: "しゅう", meaning: "हप्ता" },
+                { kanji: "毎", reading: "まい", meaning: "प्रत्येक" },
+                { kanji: "午", reading: "ご", meaning: "दिउँसो" },
+                { kanji: "後", reading: "あと", meaning: "पछि / पछाडि" },
+                { kanji: "見", reading: "みる", meaning: "हेर्नु" },
+                { kanji: "食", reading: "たべる", meaning: "खानु" },
+                { kanji: "飲", reading: "のむ", meaning: "पिउनु" },
+                { kanji: "買", reading: "かう", meaning: "किन्नु" },
+                { kanji: "物", reading: "もの", meaning: "चीज / वस्तु" },
+                { kanji: "行", reading: "いく", meaning: "जानु" },
+                { kanji: "休", reading: "やすむ", meaning: "आराम गर्नु" }
+            ]
+        }, {
+            title: "一緒に！＋パーツ",
+            kanji: [
+                { kanji: "今", reading: "いま", meaning: "अहिले" },
+                { kanji: "来", reading: "くる", meaning: "आउनु" },
+                { kanji: "帰", reading: "かえる", meaning: "घर फर्कनु" },
+                { kanji: "会", reading: "あう", meaning: "भेट्नु" },
+                { kanji: "社", reading: "しゃ", meaning: "कम्पनी / मन्दिर" },
+                { kanji: "聞", reading: "きく", meaning: "सुन्नु / सोध्नु" },
+                { kanji: "読", reading: "よむ", meaning: "पढ्नु" },
+                { kanji: "書", reading: "かく", meaning: "लेख्नु" },
+                { kanji: "話", reading: "はなす", meaning: "बोल्नु" },
+                { kanji: "寺", reading: "てら", meaning: "मन्दिर" },
+                { kanji: "言", reading: "こと", meaning: "शब्द / भन्नु" },
+                { kanji: "員", reading: "いん", meaning: "सदस्य" },
+                { kanji: "田", reading: "た", meaning: "धानको खेत" },
+                { kanji: "力", reading: "ちから", meaning: "शक्ति" },
+                { kanji: "門", reading: "もん", meaning: "ढोका" }
+            ]
+        }, {
+            title: "何を食べる？",
+            kanji: [
+                { kanji: "肉", reading: "にく", meaning: "मासु" },
+                { kanji: "料", reading: "りょう", meaning: "शुल्क / पकाउने" },
+                { kanji: "理", reading: "り", meaning: "कारण / व्यवस्थापन" },
+                { kanji: "野", reading: "の", meaning: "मैदान / जंगली" },
+                { kanji: "半", reading: "はん", meaning: "आधा" },
+                { kanji: "大", reading: "おおきい", meaning: "ठूलो" },
+                { kanji: "小", reading: "ちいさい", meaning: "सानो" }
+            ]
+        }, {
+            title: "家族のこと",
+            kanji: [
+                { kanji: "家", reading: "いえ", meaning: "घर / परिवार" },
+                { kanji: "族", reading: "ぞく", meaning: "परिवार / जाति" },
+                { kanji: "父", reading: "ちち", meaning: "बुबा" },
+                { kanji: "母", reading: "はは", meaning: "आमा" },
+                { kanji: "兄", reading: "あに", meaning: "दाइ" },
+                { kanji: "弟", reading: "おとうと", meaning: "भाइ" },
+                { kanji: "姉", reading: "あね", meaning: "दिदी" },
+                { kanji: "妹", reading: "いもうと", meaning: "बहिनी" },
+                { kanji: "犬", reading: "いぬ", meaning: "कुकुर" },
+                { kanji: "高", reading: "たかい", meaning: "अग्लो / महँगो" },
+                { kanji: "長", reading: "ながい", meaning: "लामो" },
+                { kanji: "短", reading: "みじかい", meaning: "छोटो" }
+            ]
+        }, {
+            title: " 好きなこと",
+            kanji: [
+                { kanji: "好", reading: "すき", meaning: "मन पराउनु" },
+                { kanji: "歌", reading: "うた", meaning: "गीत" },
+                { kanji: "音", reading: "おと", meaning: "आवाज" },
+                { kanji: "楽", reading: "たのしい", meaning: "मजा / संगीत" },
+                { kanji: "車", reading: "くるま", meaning: "गाडी" },
+                { kanji: "映", reading: "えい", meaning: "प्रतिबिम्ब / चलचित्र" },
+                { kanji: "画", reading: "が", meaning: "चित्र / योजना" },
+                { kanji: "旅", reading: "たび", meaning: "यात्रा" },
+                { kanji: "海", reading: "うみ", meaning: "समुद्र" },
+                { kanji: "外", reading: "そと", meaning: "बाहिर" }
+            ]
+        }, {
+            title: " 待ち合わせ",
+            kanji: [
+                { kanji: "駅", reading: "えき", meaning: "रेलवे स्टेशन" },
+                { kanji: "上", reading: "うえ", meaning: "माथि" },
+                { kanji: "下", reading: "した", meaning: "तल" },
+                { kanji: "地", reading: "ち", meaning: "जमिन / पृथ्वी" },
+                { kanji: "図", reading: "ず", meaning: "नक्सा / रेखाचित्र" },
+                { kanji: "右", reading: "みぎ", meaning: "दायाँ" },
+                { kanji: "左", reading: "ひだり", meaning: "बायाँ" },
+                { kanji: "道", reading: "みち", meaning: "बाटो" }
+            ]
+        }, {
+            title: "何時に、何をする？",
+            kanji: [
+                { kanji: "起", reading: "おきる", meaning: "उठ्नु" },
+                { kanji: "歩", reading: "あるく", meaning: "हिँड्नु" },
+                { kanji: "始", reading: "はじまる", meaning: "सुरु गर्नु" },
+                { kanji: "終", reading: "おわる", meaning: "समाप्त गर्नु" },
+                { kanji: "勉", reading: "べん", meaning: "लगनशील अध्ययन" },
+                { kanji: "強", reading: "つよい", meaning: "बलियो" },
+                { kanji: "朝", reading: "あさ", meaning: "बिहान" },
+                { kanji: "昼", reading: "ひる", meaning: "दिउँसो" },
+                { kanji: "夜", reading: "よる", meaning: "रात" }
+            ]
+        }, {
+            title: "病気のとき",
+            kanji: [
+                { kanji: "体", reading: "からだ", meaning: "शरीर" },
+                { kanji: "目", reading: "め", meaning: "आँखा" },
+                { kanji: "耳", reading: "みみ", meaning: "कान" },
+                { kanji: "口", reading: "くち", meaning: "मुख" },
+                { kanji: "歯", reading: "は", meaning: "दाँत" },
+                { kanji: "病", reading: "やまい", meaning: "रोग" },
+                { kanji: "院", reading: "いん", meaning: "अस्पताल / संस्था" },
+                { kanji: "薬", reading: "くすり", meaning: "औषधि" },
+                { kanji: "局", reading: "きょく", meaning: "कार्यालय / औषधि पसल" }
+            ]
+        }, {
+            title: " 旅行に行こう",
+            kanji: [
+                { kanji: "世", reading: "せ", meaning: "संसार / पुस्ता" },
+                { kanji: "界", reading: "かい", meaning: "संसार / सीमा" },
+                { kanji: "春", reading: "はる", meaning: "वसन्त" },
+                { kanji: "夏", reading: "なつ", meaning: "गर्मी" },
+                { kanji: "秋", reading: "あき", meaning: "शरद" },
+                { kanji: "冬", reading: "ふゆ", meaning: "जाडो" },
+                { kanji: "早", reading: "はやい", meaning: "चाँडो / तीव्र" },
+                { kanji: "夕", reading: "ゆう", meaning: "साँझ" },
+                { kanji: "予", reading: "よ", meaning: "पहिले देखि" },
+                { kanji: "約", reading: "やく", meaning: "वाचा / लगभग" },
+                { kanji: "光", reading: "ひかり", meaning: "प्रकाश" }
+            ]
+        }, {
+            title: "気をつけて！",
+            kanji: [
+                { kanji: "入", reading: "はいる", meaning: "प्रवेश गर्नु" },
+                { kanji: "出", reading: "でる", meaning: "बाहिर निस्कनु" },
+                { kanji: "持", reading: "もつ", meaning: "समाउनु" },
+                { kanji: "立", reading: "たつ", meaning: "उभिनु" },
+                { kanji: "使", reading: "つかう", meaning: "प्रयोग गर्नु" },
+                { kanji: "用", reading: "よう", meaning: "प्रयोग / उद्देश्य" },
+                { kanji: "中", reading: "なか", meaning: "भित्र / मध्य" },
+                { kanji: "新", reading: "あたらしい", meaning: "नयाँ" },
+                { kanji: "古", reading: "ふるい", meaning: "पुरानो" },
+                { kanji: "注", reading: "ちゅう", meaning: "खन्याउनु / सावधानी" },
+                { kanji: "意", reading: "い", meaning: "अर्थ / इरादा" },
+                { kanji: "止", reading: "とまる", meaning: "रोक्नु" }
+            ]
+        }, {
+            title: " どんなニュース？",
+            kanji: [
+                { kanji: "天", reading: "てん", meaning: "आकाश / स्वर्ग" },
+                { kanji: "気", reading: "き", meaning: "आत्मा / भावना" },
+                { kanji: "雨", reading: "あめ", meaning: "वर्षा" },
+                { kanji: "台", reading: "たい", meaning: "स्ट्यान्ड / आँधी" },
+                { kanji: "風", reading: "かぜ", meaning: "हावा" },
+                { kanji: "多", reading: "おおい", meaning: "धेरै" },
+                { kanji: "低", reading: "ひくい", meaning: "न्यानो" },
+                { kanji: "度", reading: "ど", meaning: "डिग्री / पटक" },
+                { kanji: "交", reading: "こう", meaning: "काट्नु / आदानप्रदान" },
+                { kanji: "通", reading: "とおる", meaning: "पार गर्नु" },
+                { kanji: "死", reading: "しぬ", meaning: "मर्नु / मृत्यु" }
+            ]
+        }];
+
+        // ---- テーマ別15課 ----
+        const themeTitles = [
+            "始めよう！", "ショッピング", "目標に向かって", "申し込んでみよう！",
+            "住んでいる町で", "旅行の計画", "料理を作ろう！", "引っ越し",
+            "働いているところで", "遊びに行って", "地域で", "いろいろな健康法",
+            "学校で", "日本を知る", "ニュースをチェック"
+        ];
+        const themeLists = [
+            ["仕事", "働", "教", "泳", "英", "運", "転", "方", "留"],
+            ["服", "品", "電", "別", "引", "送", "切", "安", "開", "閉"],
+            ["進", "試", "験", "卒", "業", "説", "明", "写", "真", "願", "部", "科"],
+            ["住", "所", "民", "役", "知", "問", "合", "定", "員", "無", "集", "友"],
+            ["急", "特", "線", "回", "遅", "志", "待", "取", "消", "残", "心", "主", "糸", "刀"],
+            ["子", "親", "代", "屋", "内", "自", "由", "発", "着", "遠"],
+            ["牛", "魚", "飯", "菜", "味", "色", "茶", "少", "洗", "弱", "暗"],
+            ["広", "便", "利", "建", "近", "空", "室", "和", "洋", "有"],
+            ["足", "手", "元", "作", "返", "者", "林", "森", "村", "山", "川"],
+            ["場", "動", "公", "園", "鳥", "遊", "池", "店", "売", "産", "軽"],
+            ["工", "医", "紙", "町", "南", "以", "初", "借", "貸", "押"],
+            ["頭", "顔", "首", "走", "声", "重", "太", "計", "不", "痛"],
+            ["文", "研", "究", "課", "題", "習", "堂", "席", "欠", "全"],
+            ["都", "県", "北", "西", "正", "花", "祭", "青", "黒", "白", "赤"],
+            ["漢", "字", "暑", "寒", "去", "質", "答", "同", "思", "考", "銀", "悪"]
+        ];
+
+        const commonMap = {
+            "仕": "し/काम",
+            "働": "はたらく/काम गर्नु",
+            "教": "おしえる/सिकाउनु",
+            "泳": "およぐ/पौडिनु",
+            "英": "えい/बेलायत",
+            "運": "うん/भाग्य",
+            "転": "てん/घुम्नु",
+            "方": "ほう/दिशा",
+            "留": "りゅう/बस्नु",
+            "服": "ふく/लुगा",
+            "品": "しな/वस्तु",
+            "電": "でん/बिजुली",
+            "別": "べつ/अलग",
+            "引": "ひく/तान्नु",
+            "送": "おくる/पठाउनु",
+            "切": "きる/काट्नु",
+            "安": "やすい/सस्तो",
+            "開": "ひらく/खोल्नु",
+            "閉": "しめる/बन्द",
+            "進": "すすむ/अगाडि",
+            "試": "ためす/परीक्षा",
+            "験": "けん/परीक्षण",
+            "卒": "そつ/स्नातक",
+            "業": "ぎょう/व्यवसाय",
+            "説": "せつ/व्याख्या",
+            "明": "あかるい/उज्यालो",
+            "写": "うつす/प्रतिलिपि",
+            "真": "ま/सत्य",
+            "願": "ねがう/इच्छा",
+            "部": "ぶ/भाग",
+            "科": "か/विभाग",
+            "住": "すむ/बसोबास",
+            "所": "ところ/स्थान",
+            "民": "みん/नागरिक",
+            "役": "やく/भूमिका",
+            "知": "しる/जान्नु",
+            "問": "とん/प्रश्न",
+            "合": "あう/मिल्नु",
+            "定": "てい/निश्चित",
+            "員": "いん/सदस्य",
+            "無": "む/छैन",
+            "集": "あつまる/जम्मा",
+            "友": "とも/साथी",
+            "急": "きゅう/हतार",
+            "特": "とく/विशेष",
+            "線": "せん/रेखा",
+            "回": "かい/पटक",
+            "遅": "おそい/ढिलो",
+            "志": "こころざし/इच्छा",
+            "待": "まつ/पर्खनु",
+            "取": "とる/लिनु",
+            "消": "けす/मेट्नु",
+            "残": "のこる/बाँकी",
+            "心": "こころ/मन",
+            "主": "しゅ/मुख्य",
+            "糸": "いと/धागो",
+            "刀": "かたな/तरवार",
+            "子": "こ/बच्चा",
+            "親": "おや/आमाबुबा",
+            "代": "かわる/प्रतिनिधि",
+            "屋": "や/पसल",
+            "内": "ない/भित्र",
+            "自": "みずから/आफै",
+            "由": "よし/कारण",
+            "発": "はつ/प्रस्थान",
+            "着": "つく/आइपुग्नु",
+            "遠": "とおい/टाढा",
+            "牛": "うし/गाई",
+            "魚": "さかな/माछा",
+            "飯": "めし/भात",
+            "菜": "さい/तरकारी",
+            "味": "あじ/स्वाद",
+            "色": "いろ/रङ",
+            "茶": "ちゃ/चिया",
+            "少": "すくない/थोरै",
+            "洗": "あらう/धुनु",
+            "弱": "よわい/कमजोर",
+            "暗": "くらい/अँध्यारो",
+            "広": "ひろい/फराकिलो",
+            "便": "べん/सुविधा",
+            "利": "り/फाइदा",
+            "建": "たてる/निर्माण",
+            "近": "ちかい/नजिक",
+            "空": "そら/आकाश",
+            "室": "しつ/कोठा",
+            "和": "わ/शान्ति",
+            "洋": "よう/महासागर",
+            "有": "ある/हुनु",
+            "足": "あし/खुट्टा",
+            "手": "て/हात",
+            "元": "もと/मूल",
+            "作": "つくる/बनाउनु",
+            "返": "かえす/फिर्ता",
+            "者": "もの/व्यक्ति",
+            "林": "はやし/जङ्गल",
+            "森": "もり/घना",
+            "村": "むら/गाउँ",
+            "山": "やま/पहाड",
+            "川": "かわ/नदी",
+            "場": "ば/ठाउँ",
+            "動": "うごく/चल्नु",
+            "公": "こう/सार्वजनिक",
+            "園": "えん/बगैचा",
+            "鳥": "とり/चरा",
+            "遊": "あそぶ/खेल्नु",
+            "池": "いけ/पोखरी",
+            "店": "みせ/पसल",
+            "売": "うる/बेच्नु",
+            "産": "うむ/जन्म",
+            "軽": "かるい/हल्का",
+            "工": "こう/निर्माण",
+            "医": "い/डाक्टर",
+            "紙": "かみ/कागज",
+            "町": "まち/सहर",
+            "南": "みなみ/दक्षिण",
+            "以": "い/देखि",
+            "初": "はじめ/पहिलो",
+            "借": "かりる/ऋण",
+            "貸": "かす/ऋण दिनु",
+            "押": "おす/थिच्नु",
+            "頭": "あたま/टाउको",
+            "顔": "かお/अनुहार",
+            "首": "くび/घाँटी",
+            "走": "हाशिरु/दौडनु",
+            "声": "こえ/आवाज",
+            "重": "おもい/भारी",
+            "太": "ふとい/मोटो",
+            "計": "けい/गणना",
+            "不": "ふ/छैन",
+            "痛": "いたい/पीडा",
+            "文": "ぶん/लेख",
+            "研": "けん/अध्ययन",
+            "究": "きゅう/अनुसन्धान",
+            "課": "か/पाठ",
+            "題": "だい/विषय",
+            "習": "ならう/सिक्नु",
+            "堂": "どう/हल",
+            "席": "せき/सिट",
+            "欠": "かける/अभाव",
+            "全": "ぜん/सम्पूर्ण",
+            "都": "と/महानगर",
+            "県": "けん/प्रिफेक्चर",
+            "北": "きた/उत्तर",
+            "西": "にし/पश्चिम",
+            "正": "ただしい/सही",
+            "花": "はな/फूल",
+            "祭": "मात्सुरि/चाड",
+            "青": "あお/नीलो",
+            "黒": "くろ/कालो",
+            "白": "しろ/सेतो",
+            "赤": "あか/रातो",
+            "漢": "かん/चिनियाँ",
+            "字": "じ/अक्षर",
+            "暑": "あつい/गर्मी",
+            "寒": "さむい/जाडो",
+            "去": "さる/जानु",
+            "質": "しつ/गुण",
+            "答": "こたえ/जवाफ",
+            "同": "おなじ/समान",
+            "思": "おもう/सोच्नु",
+            "考": "かんがえる/विचार",
+            "銀": "ぎん/चाँदी",
+            "悪": "わるい/खराब"
+        };
+
+        function buildThemeEntry(ch) {
+            const [rd, mn] = commonMap[ch] ? commonMap[ch].split("/") : [ch, "अर्थ"];
+            return { kanji: ch, reading: rd || ch, meaning: mn || ch };
+        }
+
+        const themeChapters = themeTitles.map((title, idx) => ({
+            title,
+            kanji: themeLists[idx].map(buildThemeEntry)
+        }));
+
+        // ---- 統合 ----
+        const allRaw = [...legacyChapters, ...themeChapters];
+        const allKanjiList = allRaw.flatMap(c => c.kanji);
+        const fullChapters = [
+            { title: "सबै (全漢字)", kanji: allKanjiList },
+            ...allRaw
+        ];
+        const numberedChapters = fullChapters.map((ch, i) => ({
+            ...ch,
+            display: `${i + 1}. ${ch.title}`
+        }));
+
+        // =====================================================================
+        //  2. アプリケーション状態
+        // =====================================================================
+
+        let currentChapIdx = 0;
+        let currentCards = [];
+        let cardIndex = 0;
+        let flipped = false;
+        let shuffleActive = false;
+        let studyMode = 'meaning'; // 'meaning' | 'kanji'
+
+        const selectEl = document.getElementById('chapterSelect');
+        const shuffleBtn = document.getElementById('shuffleToggle');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const flipCardBtn = document.getElementById('flipBtn');
+        const cardElem = document.getElementById('flashcard');
+        const frontDiv = document.getElementById('frontFace');
+        const backDiv = document.getElementById('backFace');
+        const counterSpan = document.getElementById('counter');
+        const progFill = document.getElementById('progFill');
+        const lessonBadge = document.getElementById('lessonBadge');
+        const containerAnim = document.getElementById('cardContainer');
+
+        // =====================================================================
+        //  3. ユーティリティ
+        // =====================================================================
+
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+        }
+
+        function unflipAnd(cb) {
+            if (flipped) {
+                cardElem.classList.remove('flipped');
+                flipped = false;
+                setTimeout(cb, 260);
+            } else {
+                cb();
+            }
+        }
+
+        // =====================================================================
+        //  4. レンダリング
+        // =====================================================================
+
+        function loadChapter(idx) {
+            currentChapIdx = idx;
+            currentCards = [...numberedChapters[idx].kanji];
+            if (shuffleActive) shuffleArray(currentCards);
+            cardIndex = 0;
+            if (flipped) {
+                cardElem.classList.remove('flipped');
+                flipped = false;
+            }
+            renderCard(true);
+            lessonBadge.innerText = numberedChapters[idx].display;
+        }
+
+        function renderCard(animate = true) {
+            if (!currentCards.length) {
+                counterSpan.textContent = '0 / 0';
+                progFill.style.width = '0%';
+                frontDiv.innerHTML = '<div style="font-size:1.2rem;color:var(--ink-mute);">カードがありません</div>';
+                backDiv.innerHTML = '<div style="font-size:1.2rem;color:var(--ink-mute);">—</div>';
+                return;
+            }
+
+            const card = currentCards[cardIndex];
+            const total = currentCards.length;
+            counterSpan.textContent = `${cardIndex + 1} / ${total}`;
+            progFill.style.width = `${((cardIndex + 1) / total) * 100}%`;
+
+            if (animate) {
+                containerAnim.classList.remove('animate');
+                void containerAnim.offsetWidth;
+                containerAnim.classList.add('animate');
+            }
+
+            // 表面
+            if (studyMode === 'meaning') {
+                frontDiv.innerHTML = `
+                    <div class="card-badge">📖 読み+अर्थ → 漢字</div>
+                    <div class="primary-reading">${card.reading}</div>
+                    <div class="meaning-ne">${card.meaning}</div>
+                    <div class="tap-hint">✨ タップ</div>
+                `;
+            } else {
+                frontDiv.innerHTML = `
+                    <div class="card-badge">🈳 漢字 → 読み+अर्थ</div>
+                    <div class="main-kanji">${card.kanji}</div>
+                    <div class="tap-hint">✨ タップ</div>
+                `;
+            }
+
+            // 裏面
+            if (studyMode === 'meaning') {
+                backDiv.innerHTML = `
+                    <div class="back-top">
+                        <div class="back-label">✓ 漢字 (答え)</div>
+                        <div class="back-kanji">${card.kanji}</div>
+                        <div class="back-reading">${card.reading} · ${card.meaning}</div>
+                    </div>
+                `;
+            } else {
+                backDiv.innerHTML = `
+                    <div class="back-top">
+                        <div class="back-label">読み + अर्थ</div>
+                        <div class="back-reading">${card.reading}</div>
+                        <div class="back-meaning">${card.meaning}</div>
+                    </div>
+                `;
+            }
+        }
+
+        // =====================================================================
+        //  5. アクション
+        // =====================================================================
+
+        function flipCard() {
+            flipped = !flipped;
+            cardElem.classList.toggle('flipped', flipped);
+        }
+
+        function nextCard() {
+            if (cardIndex >= currentCards.length - 1) return;
+            unflipAnd(() => {
+                cardIndex++;
+                renderCard(true);
+            });
+        }
+
+        function prevCard() {
+            if (cardIndex <= 0) return;
+            unflipAnd(() => {
+                cardIndex--;
+                renderCard(true);
+            });
+        }
+
+        function toggleShuffle() {
+            shuffleActive = !shuffleActive;
+            shuffleBtn.classList.toggle('on', shuffleActive);
+            loadChapter(currentChapIdx);
+        }
+
+        // =====================================================================
+        //  6. 初期化
+        // =====================================================================
+
+        function initSelect() {
+            numberedChapters.forEach((ch, i) => {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = ch.display;
+                selectEl.appendChild(opt);
+            });
+            selectEl.value = 0;
+        }
+
+        initSelect();
+        loadChapter(0);
+
+        // ---- イベント ----
+        selectEl.addEventListener('change', (e) => loadChapter(parseInt(e.target.value)));
+        shuffleBtn.addEventListener('click', toggleShuffle);
+        flipCardBtn.addEventListener('click', flipCard);
+        prevBtn.addEventListener('click', prevCard);
+        nextBtn.addEventListener('click', nextCard);
+        cardElem.addEventListener('click', flipCard);
+
+        // モード切替
+        document.querySelectorAll('.mode-btn').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.mode-btn').forEach((b) => b.classList.remove('active'));
+                btn.classList.add('active');
+                studyMode = btn.dataset.mode;
+                if (flipped) {
+                    cardElem.classList.remove('flipped');
+                    flipped = false;
+                }
+                renderCard();
+            });
+        });
+
+        // ---- タッチスワイプ ----
+        let touchStartX = 0;
+        let touchStartY = 0;
+        cardElem.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        });
+
+        cardElem.addEventListener('touchend', (e) => {
+            const dx = e.changedTouches[0].clientX - touchStartX;
+            const dy = e.changedTouches[0].clientY - touchStartY;
+            if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 0.6) {
+                if (dx > 0) prevCard();
+                else nextCard();
+            }
+        });
+
+        // ---- キーボード ----
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextCard();
+            else if (e.key === 'ArrowLeft') prevCard();
+            else if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                flipCard();
+            }
+        });
+
+        // ---- サービスワーカー用（コンソールログ抑制） ----
+        console.log('✅ 漢字フラッシュカード 読み込み完了');
+    </script>
+</body>
+</html>
